@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
   StyleSheet,
   Modal,
+  Button
 } from "react-native";
 import { addProduct } from "../components/productEnd";
 
@@ -44,6 +45,10 @@ const AddProductScreen = ({ navigation }) => {
         setLoading(false);
       }
     }
+  };
+
+  const handleAddsub = () => {
+    navigation.navigate("AddSubCategoryScreen");
   };
 
   return (
@@ -86,6 +91,7 @@ const AddProductScreen = ({ navigation }) => {
               value={Idcategory}
               onChangeText={setIdcategory}
             />
+            <Button title="Tambahkan Kategori" onPress={handleAddsub} />
           </View>
 
           <View style={styles.formGroup}>

@@ -4,7 +4,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { ActivityIndicator, View, StyleSheet, Alert } from "react-native";
 import { checkLoginStatus} from "./src/components/backEnd";
 
-// Screen imports
 import AdminScreen from "./src/Adminscreens/adminScreen";
 import ProductScreen from "./src/Adminscreens/productScreen";
 import AddProductScreen from "./src/Adminscreens/addProductScreen";
@@ -12,6 +11,7 @@ import UserScreen from "./src/Userscreens/userScreen";
 import SignupScreen from "./src/logscreens/signupScreen";
 import LoginScreen from "./src/logscreens/loginScreen";
 import AddCategoryScreen from "./src/Adminscreens/addCategoryScreen";
+import AddSubCategoryScreen from "./src/Adminscreens/addSubCategoryScreen";
 
 const Stack = createStackNavigator();
 
@@ -77,6 +77,11 @@ const handleCheck = async () => {
               <Stack.Screen
                 name="AddCategoryScreen"
                 component={AddCategoryScreen}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="AddSubCategoryScreen"
+                component={AddSubCategoryScreen}
                 options={{ headerShown: false }}
               />
             </>
