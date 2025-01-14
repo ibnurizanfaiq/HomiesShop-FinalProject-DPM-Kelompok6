@@ -46,6 +46,10 @@ const ProductScreen = ({ navigation }) => {
     navigation.navigate('AddProductScreen');
   }, [navigation]);
 
+  const handleAddCategory = useCallback(() => {
+    navigation.navigate('AddCategoryScreen');
+  }, [navigation]);
+
   const renderProduct = useCallback(({ item }) => {
     return (
       <TouchableOpacity
@@ -92,6 +96,9 @@ const ProductScreen = ({ navigation }) => {
       />
       <TouchableOpacity style={styles.addButton} onPress={handleAddProduct}>
         <Text style={styles.addButtonText}>Tambah Produk</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.addButton} onPress={handleAddCategory}>
+        <Text style={styles.addButtonText}>Tambah Main Kategori</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

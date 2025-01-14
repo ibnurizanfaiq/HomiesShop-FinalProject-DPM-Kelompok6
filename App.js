@@ -11,6 +11,7 @@ import AddProductScreen from "./src/Adminscreens/addProductScreen";
 import UserScreen from "./src/Userscreens/userScreen";
 import SignupScreen from "./src/logscreens/signupScreen";
 import LoginScreen from "./src/logscreens/loginScreen";
+import AddCategoryScreen from "./src/Adminscreens/addCategoryScreen";
 
 const Stack = createStackNavigator();
 
@@ -72,6 +73,11 @@ const handleCheck = async () => {
                 name="AddProductScreen" 
                 component={AddProductScreen} 
                 options={{ headerShown: false}}
+              />
+              <Stack.Screen
+                name="AddCategoryScreen"
+                component={AddCategoryScreen}
+                options={{ headerShown: false }}
               />
             </>
           ) : (

@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { 
+import {
   SafeAreaView,
   View,
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  Alert, 
-  ActivityIndicator, 
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Alert,
+  ActivityIndicator,
   StyleSheet,
-  Modal 
+  Modal,
 } from "react-native";
 import { addProduct } from "../components/productEnd";
 
@@ -30,20 +30,20 @@ const AddProductScreen = ({ navigation }) => {
     ) {
       Alert.alert("Error", "Semua bidang harus diisi.");
       return;
-    } else{
-    setLoading(true);
-    const Create_at = new Date().toLocaleString();
-    const Update_at = Create_at;
-    try {
-      const result = await addProduct(Idproduct, Idcategory, Name, Price, Description, Create_at, Update_at);
-      Alert.alert("Sukses", result.message);
-      navigation.goBack();
-    } catch (error) {
-      Alert.alert("Error", error.message);
-    } finally {
-      setLoading(false);
+    } else {
+      setLoading(true);
+      const Create_at = new Date().toLocaleString();
+      const Update_at = Create_at;
+      try {
+        const result = await addProduct(Idproduct, Idcategory, Name, Price, Description, Create_at, Update_at);
+        Alert.alert("Sukses", result.message);
+        navigation.goBack();
+      } catch (error) {
+        Alert.alert("Error", error.message);
+      } finally {
+        setLoading(false);
+      }
     }
-    };
   };
 
   return (
@@ -53,43 +53,66 @@ const AddProductScreen = ({ navigation }) => {
           <ActivityIndicator size="large" color="#007BFF" />
         </View>
       </Modal>
-      <Text style={styles.title}>Tambah Produk</Text>
-      
-      <TextInput
-        style={styles.input}
-        placeholder="ID Produk"
-        value={Idproduct}
-        onChangeText={setIdproduct}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="ID Kategori"
-        value={Idcategory}
-        onChangeText={setIdcategory}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Nama Produk"
-        value={Name}
-        onChangeText={setName}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Harga"
-        keyboardType="numeric"
-        value={Price}
-        onChangeText={setPrice}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Deskripsi"
-        value={Description}
-        onChangeText={setDescription}
-      />
+      <View style={styles.content}>
+        <View style={styles.infoCard}>
+          <Text style={styles.infoTitle}>Informasi Produk</Text>
 
-      <TouchableOpacity style={styles.button} onPress={handleAddProduct}>
-        <Text style={styles.buttonText}>Tambah Produk</Text>
-      </TouchableOpacity>
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Nama Barang</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Nama Barang"
+              value={Name}
+              onChangeText={setName}
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Harga</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Harga"
+              keyboardType="numeric"
+              value={Price}
+              onChangeText={setPrice}
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Kategori</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Kategori"
+              value={Idcategory}
+              onChangeText={setIdcategory}
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Kode Produk</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Kode Produk"
+              value={Idproduct}
+              onChangeText={setIdproduct}
+            />
+          </View>
+
+          <View style={styles.formGroup}>
+            <Text style={styles.label}>Deskripsi</Text>
+            <TextInput
+              style={styles.inputField}
+              placeholder="Deskripsi"
+              value={Description}
+              onChangeText={setDescription}
+            />
+          </View>
+
+          <TouchableOpacity style={styles.submitBtn} onPress={handleAddProduct}>
+            <Text style={styles.submitBtnText}>Tambahkan</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   );
 };
@@ -97,35 +120,93 @@ const AddProductScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#E3EED4",
+  },
+  header: {
+    height: 133,
+    backgroundColor: "#E3EED4",
+    position: "relative",
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2 }, 
+    shadowOpacity: 0.2, 
+    shadowRadius: 3,
+    elevation: 5,
+    zIndex: 1,
+  },
+  nav: {
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff",
-    paddingHorizontal: 20,
+    padding: 60,
+    gap: 10,
+    marginLeft: -20,
+  },
+  backArrow: {
+    width: 32, // Memperbesar ukuran logo
+    height: 32,
+    marginLeft: -10, // Menggeser logo lebih ke kiri
   },
   title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    fontFamily: "Inter",
+    fontWeight: "700",
+    fontSize: 15,
+    color: "#000000",
+  },
+  headerDesign: {
+    position: "absolute",
+    top: 1,
+    right: 20,
+    width: 100,
+    height: 200,
+  },
+  content: {
+    marginTop: 50,
+    paddingHorizontal: 20,
+  },
+  infoCard: {
+    backgroundColor: "#C4D559",
+    borderRadius: 8,
+    padding: 20,
+    width: "100%",
+  },
+  infoTitle: {
+    fontFamily: "Inter",
+    fontWeight: "700",
+    fontSize: 20,
+    color: "#000000",
     marginBottom: 20,
   },
-  input: {
-    width: "100%",
-    padding: 15,
-    marginBottom: 10,
-    borderWidth: 1,
-    borderColor: "#333",
-    borderRadius: 5,
+  formGroup: {
+    marginBottom: 20,
   },
-  button: {
+  label: {
+    fontFamily: "Inter",
+    fontWeight: "400",
+    fontSize: 13,
+    color: "#000000",
+    marginBottom: 8,
+  },
+  inputField: {
     width: "100%",
-    padding: 15,
-    backgroundColor: "#007BFF",
+    height: 43,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    paddingHorizontal: 15,
+    fontFamily: "Inter",
+    fontSize: 16,
+    color: "#000000",
+  },
+  submitBtn: {
+    backgroundColor: "#4285F4",
+    borderRadius: 8,
     alignItems: "center",
-    borderRadius: 5,
+    paddingVertical: 10,
     marginTop: 10,
   },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "bold",
+  submitBtnText: {
+    color: "#FFFFFF",
+    fontFamily: "Inter",
+    fontWeight: "700",
+    fontSize: 12,
   },
   loadingContainer: {
     flex: 1,
