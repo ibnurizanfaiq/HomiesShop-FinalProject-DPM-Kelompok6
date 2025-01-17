@@ -20,15 +20,32 @@ export const addCategories = async (idcategory, name, create_at, update_at) => {
     }
 };
 
-// AddSubCategories Function
-export const addSubCategories = async (idsubcategory, idcategory,name, create_at, update_at) => {
+// GetCategories Function
+export const getCategories = async () => {
     try {
-        const categoryRef = ref(database, `subcategories/${idcategory}`);
+        const categoryRef = ref(database, `categories`);
+        const snapshot = await get(categoryRef);
+
+        if (snapshot.exists()) {
+            return {success: true, data: snapshot.val()};
+        } else {
+            return {success: false, message: "Data kategori tidak ditemukan."};
+        }
+    } catch (error) {
+        return {success: false, message: "Terjadi kesalahan saat mengambil data."};
+    }
+};
+
+// AddSubCategories Function
+export const addSubCategories = async (idsubcategory, idcategory,name,image, create_at, update_at) => {
+    try {
+        const categoryRef = ref(database, `subcategories/${idcategory}/${idsubcategory}`);
 
         await set(categoryRef, {
             idsubcategory,
             idcategory,
             name,
+            image,
             create_at,
             update_at
         });
@@ -41,9 +58,9 @@ export const addSubCategories = async (idsubcategory, idcategory,name, create_at
 
 
 // GetSubCategories Function
-export const getSubCategories = async (idcategory) => {
+export const getSubCategories = async () => {
     try {
-        const subcategoryRef = ref(database, `subcategories/${idcategory}`);
+        const subcategoryRef = ref(database, `subcategories`);
         const snapshot = await get(subcategoryRef);
 
         if (snapshot.exists()) {
@@ -112,6 +129,21 @@ export const getProduct = async () => {
   }
 };
 
+// GetProductById Function
+export const GetProductById = async (idsubcategory) => {
+    try {
+        const productRef = ref(database, `products/${idsubcategory}`);
+        const snapshot = await get(productRef);
+
+        if (snapshot.exists()) {
+            return {success: true, data: snapshot.val()};
+        } else {
+            return {success: false, message: "Data produk tidak ditemukan."};
+        }
+    } catch (error) {
+        return {success: false, message: "Terjadi kesalahan saat mengambil data."};
+    }
+};
   
 // UpdateProduct Function
 export const updateProduct = async (idproduct, idsubcategory, name, price, description, update_at) => {
@@ -128,4 +160,4 @@ export const updateProduct = async (idproduct, idsubcategory, name, price, descr
     } catch (error) {
         return {success: false, message: "Produk gagal diupdate."};
     }
-}
+};

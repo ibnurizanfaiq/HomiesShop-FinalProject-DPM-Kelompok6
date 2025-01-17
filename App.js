@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ActivityIndicator, View, StyleSheet, Alert } from "react-native";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
 import { checkLoginStatus} from "./src/components/backEnd";
 
 import AdminScreen from "./src/Adminscreens/adminScreen";
 import ProductScreen from "./src/Adminscreens/productScreen";
 import AddProductScreen from "./src/Adminscreens/addProductScreen";
-import UserScreen from "./src/Userscreens/userScreen";
+import HomeScreen from "./src/Userscreens/userScreen";
+import ProductList from "./src/Userscreens/productList";
 import SignupScreen from "./src/logscreens/signupScreen";
 import LoginScreen from "./src/logscreens/loginScreen";
 import AddCategoryScreen from "./src/Adminscreens/addCategoryScreen";
@@ -87,9 +88,14 @@ const handleCheck = async () => {
             </>
           ) : (
             <>
-              <Stack.Screen name="Userhome" options={{ headerShown: false }}>
-                {props => <UserScreen {...props} onLogout={handleCheck} />}
+              <Stack.Screen name="HomeScreen" options={{ headerShown: false }}>
+                {props => <HomeScreen {...props} onLogout={handleCheck} />}
               </Stack.Screen>
+              <Stack.Screen
+                name="ProductList"
+                component={ProductList}
+                options={{ headerShown: false }}
+              />
             </>
           )
         ) : (

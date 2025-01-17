@@ -1,12 +1,15 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { SafeAreaView, View, Text, TextInput, TouchableOpacity, Alert, ActivityIndicator, StyleSheet, Modal } from "react-native";
-import { addSubCategories } from "../components/productEnd";
+import { addSubCategories, getCategories } from "../components/productEnd";
+import RNPickerSelect from "react-native-picker-select";
+
 
 const AddSubCategoryScreen = ({navigation}) => {
     const [Idcategory, setIdcategory] = useState("");
     const [Idsub, setIdsub] = useState("");
     const [Name, setName] = useState("");
     const [Loading, setLoading] = useState(false);
+    const [categories, setCategories] = useState([]); 
 
     const handleSubCategories = async () => {
         if (Idcategory.trim() === "" || Idsub.trim() === "" || Name.trim() === "") {
@@ -17,7 +20,7 @@ const AddSubCategoryScreen = ({navigation}) => {
             const Create_at = new Date().toLocaleString();
             const Update_at = Create_at;
             try {
-                const result = await addSubCategories(Idcategory, Idsub, Name, Create_at, Update_at);
+                const result = await addSubCategories(Idsub, Idcategory, Name, Create_at, Update_at);
                 Alert.alert("Sukses", result.message);
                 navigation.goBack();
             } catch (error) {
@@ -28,6 +31,31 @@ const AddSubCategoryScreen = ({navigation}) => {
         }
     };
 
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const result = await getCategories();
+                if (result.success) {
+                    const categoryArray = Object.keys(result.data).map(key => ({
+                        idcategory: key,
+                        ...result.data[key],
+                    }));
+                    setCategories(categoryArray);
+                } else {
+                    console.warn(result?.message || "Invalid response format");
+                    Alert.alert("Kesalahan", result?.message || "Gagal memuat kategori.");
+                }
+            } catch (error) {
+                console.error("Error fetching categories:", error);
+                Alert.alert("Kesalahan", "Terjadi kesalahan saat mengambil data kategori.");
+            }
+        };
+        fetchCategories();
+    }, []);
+    
+    const handleAddCategory = () => {
+        navigation.navigate("AddCategoryScreen");
+    };
     return (
         <SafeAreaView style={styles.container}>
             <Modal visible={Loading} transparent={true}>
@@ -41,12 +69,16 @@ const AddSubCategoryScreen = ({navigation}) => {
 
                     <View style={styles.formGroup}>
                         <Text style={styles.label}>ID Kategori</Text>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Masukkan ID Kategori"
-                            value={Idcategory}
-                            onChangeText={(value) => setIdcategory(value)}
+                        <RNPickerSelect
+                            onValueChange={(value) => setIdcategory(value)}
+                            items={categories.map((category) => ({
+                                label: category.name,
+                                value: category.idcategory,
+                            }))}
                         />
+                        <TouchableOpacity onPress={handleAddCategory}>
+                            <Text style={{color: "#007BFF", marginTop: 5}}>Tambah Kategori</Text>
+                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.formGroup}>

@@ -30,7 +30,7 @@ const ProductScreen = ({ navigation }) => {
           setProducts(productArray);
         } else {
           console.warn(result?.message || 'Invalid response format');
-          Alert.alert('Kesalahan', result?.message || 'Gagal memuat produk.');
+          Alert.alert('Sepertinya', result?.message || 'Gagal memuat produk.');
         }
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -46,30 +46,28 @@ const ProductScreen = ({ navigation }) => {
     navigation.navigate('AddProductScreen');
   }, [navigation]);
 
-  const handleAddCategory = useCallback(() => {
-    navigation.navigate('AddCategoryScreen');
-  }, [navigation]);
-
   const renderProduct = useCallback(({ item }) => {
     return (
-      <TouchableOpacity
-        style={styles.productContainer}
-        onPress={() =>
-          navigation.navigate('ProductDetailScreen', { product: item })
-        }>
-        <View style={styles.iconContainer}>
-          <MaterialIcons name="shopping-bag" size={ICON_SIZE} color={ICON_COLOR} />
-        </View>
-        <View style={styles.productTextContainer}>
-          <Text style={styles.productName}>{item.name || 'Produk Tidak Diketahui'}</Text>
-          <Text style={styles.productPrice}>
-            {item.price ? `Rp ${item.price}` : 'Harga tidak tersedia'}
-          </Text>
-          <Text style={styles.productDescription}>
-            {item.description || 'Deskripsi tidak tersedia'}
-          </Text>
-        </View>
-      </TouchableOpacity>
+      <SafeAreaView style={styles.container}>
+        <TouchableOpacity
+          style={styles.productContainer}
+          onPress={() =>
+            navigation.navigate('ProductDetailScreen', { product: item })
+          }>
+          <View style={styles.iconContainer}>
+            <MaterialIcons name="shopping-bag" size={ICON_SIZE} color={ICON_COLOR} />
+          </View>
+          <View style={styles.productTextContainer}>
+            <Text style={styles.productName}>{item.name || 'Produk Tidak Diketahui'}</Text>
+            <Text style={styles.productPrice}>
+              {item.price ? `Rp ${item.price}` : 'Harga tidak tersedia'}
+            </Text>
+            <Text style={styles.productDescription}>
+              {item.description || 'Deskripsi tidak tersedia'}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      </SafeAreaView>
     );
   }, [navigation]);
 
@@ -96,9 +94,6 @@ const ProductScreen = ({ navigation }) => {
       />
       <TouchableOpacity style={styles.addButton} onPress={handleAddProduct}>
         <Text style={styles.addButtonText}>Tambah Produk</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.addButton} onPress={handleAddCategory}>
-        <Text style={styles.addButtonText}>Tambah Main Kategori</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

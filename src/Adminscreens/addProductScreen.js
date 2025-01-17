@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -11,20 +11,22 @@ import {
   Modal,
   Button
 } from "react-native";
-import { addProduct } from "../components/productEnd";
+import { addProduct, getSubCategories } from "../components/productEnd";
+import RNPickerSelect from "react-native-picker-select";
 
 const AddProductScreen = ({ navigation }) => {
   const [Idproduct, setIdproduct] = useState("");
-  const [Idcategory, setIdcategory] = useState("");
+  const [Idsubcategory, setIdsubcategory] = useState("");
   const [Name, setName] = useState("");
   const [Price, setPrice] = useState("");
   const [Description, setDescription] = useState("");
+  const [subcategories, setSubcategories] = useState([]);
   const [Loading, setLoading] = useState(false);
 
   const handleAddProduct = async () => {
     if (
       Idproduct.trim() === "" ||
-      Idcategory.trim() === "" ||
+      Idsubcategory.trim() === "" ||
       Name.trim() === "" ||
       Price.trim() === "" ||
       Description.trim() === ""
@@ -36,7 +38,7 @@ const AddProductScreen = ({ navigation }) => {
       const Create_at = new Date().toLocaleString();
       const Update_at = Create_at;
       try {
-        const result = await addProduct(Idproduct, Idcategory, Name, Price, Description, Create_at, Update_at);
+        const result = await addProduct(Idproduct, Idsubcategory, Name, Price, Description, Create_at, Update_at);
         Alert.alert("Sukses", result.message);
         navigation.goBack();
       } catch (error) {
@@ -51,13 +53,43 @@ const AddProductScreen = ({ navigation }) => {
     navigation.navigate("AddSubCategoryScreen");
   };
 
+  useEffect(() => {
+    const fetchSubCategories = async () => {
+      try {
+        const result = await getSubCategories();
+        if (result.success) {
+          const data = [];
+          Object.keys(result.data).forEach((key) => {
+            const subcategoryObj = result.data[key];
+            Object.keys(subcategoryObj).forEach((subKey) => {
+              if (subKey !== "name") { 
+                data.push({
+                  idcategory: subKey,
+                  name: subcategoryObj[subKey].name,
+                });
+              }
+            });
+          });
+          setSubcategories(data);
+        } else {
+          Alert.alert("Error", result.message);
+        }
+      } catch (error) {
+        Alert.alert("Error", "Terjadi kesalahan saat mengambil data.");
+      }
+    };
+    fetchSubCategories();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Modal visible={Loading} transparent={true}>
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#007BFF" />
-        </View>
-      </Modal>
+      {Loading && (
+        <Modal visible={Loading} transparent={true} animationType="fade">
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#007BFF" />
+          </View>
+        </Modal>
+      )}
       <View style={styles.content}>
         <View style={styles.infoCard}>
           <Text style={styles.infoTitle}>Informasi Produk</Text>
@@ -85,11 +117,15 @@ const AddProductScreen = ({ navigation }) => {
 
           <View style={styles.formGroup}>
             <Text style={styles.label}>Kategori</Text>
-            <TextInput
-              style={styles.inputField}
-              placeholder="Kategori"
-              value={Idcategory}
-              onChangeText={setIdcategory}
+            <RNPickerSelect
+              onValueChange={(value) => setIdsubcategory(value)}
+              items={
+                subcategories.length > 0
+                  ? subcategories.map((category) => ({
+                      label: category.name,
+                      value: category.idcategory,
+                    }))
+                  : []}
             />
             <Button title="Tambahkan Kategori" onPress={handleAddsub} />
           </View>
@@ -127,42 +163,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#E3EED4",
-  },
-  header: {
-    height: 133,
-    backgroundColor: "#E3EED4",
-    position: "relative",
-    shadowColor: "#000", 
-    shadowOffset: { width: 0, height: 2 }, 
-    shadowOpacity: 0.2, 
-    shadowRadius: 3,
-    elevation: 5,
-    zIndex: 1,
-  },
-  nav: {
-    flexDirection: "row",
-    alignItems: "center",
-    padding: 60,
-    gap: 10,
-    marginLeft: -20,
-  },
-  backArrow: {
-    width: 32, // Memperbesar ukuran logo
-    height: 32,
-    marginLeft: -10, // Menggeser logo lebih ke kiri
-  },
-  title: {
-    fontFamily: "Inter",
-    fontWeight: "700",
-    fontSize: 15,
-    color: "#000000",
-  },
-  headerDesign: {
-    position: "absolute",
-    top: 1,
-    right: 20,
-    width: 100,
-    height: 200,
   },
   content: {
     marginTop: 50,
