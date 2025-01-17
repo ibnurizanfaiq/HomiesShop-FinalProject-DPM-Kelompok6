@@ -7,6 +7,7 @@ import { checkLoginStatus} from "./src/components/backEnd";
 import AdminScreen from "./src/Adminscreens/adminScreen";
 import ProductScreen from "./src/Adminscreens/productScreen";
 import AddProductScreen from "./src/Adminscreens/addProductScreen";
+import EditProduct from "./src/Adminscreens/editProduct";
 import HomeScreen from "./src/Userscreens/userScreen";
 import ProductList from "./src/Userscreens/productList";
 import SignupScreen from "./src/logscreens/signupScreen";
@@ -69,6 +70,11 @@ const handleCheck = async () => {
                 name="ProductScreen" 
                 component={ProductScreen} 
                 options={{ headerShown: false}}
+              />
+              <Stack.Screen
+                name="EditProduct"
+                component={EditProduct}
+                options={{ headerShown: false }}
               />
               <Stack.Screen 
                 name="AddProductScreen" 

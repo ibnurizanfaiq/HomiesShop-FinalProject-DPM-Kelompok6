@@ -64,6 +64,7 @@ export const loginUser = async (email, password) => {
     }
 };
 
+// updateProfile Function
 
 // Check LoginUser and Role User
 export const checkLoginStatus = async () => {

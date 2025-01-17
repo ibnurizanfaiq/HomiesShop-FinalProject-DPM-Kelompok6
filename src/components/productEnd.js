@@ -1,5 +1,5 @@
 import { database } from "../config/firebase";
-import {ref, set, update, get} from "firebase/database";
+import {ref, set, update, get, remove} from "firebase/database";
 
 
 // AddCategories Function
@@ -159,5 +159,17 @@ export const updateProduct = async (idproduct, idsubcategory, name, price, descr
         return {success: true, message: "Produk berhasil diupdate."};
     } catch (error) {
         return {success: false, message: "Produk gagal diupdate."};
+    }
+};
+
+//DeleteProduct Function
+export const deleteProduct = async (idproduct, idsubcategory) => {
+    try {
+        const productRef = ref(database, `products/${idsubcategory}/${idproduct}`);
+        await remove(productRef);
+
+        return {success: true, message: "Produk berhasil dihapus."};
+    } catch (error) {
+        return {success: false, message: "Produk gagal dihapus."};
     }
 };

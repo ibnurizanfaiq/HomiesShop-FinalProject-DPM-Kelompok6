@@ -52,7 +52,7 @@ const ProductScreen = ({ navigation }) => {
         <TouchableOpacity
           style={styles.productContainer}
           onPress={() =>
-            navigation.navigate('ProductDetailScreen', { product: item })
+            navigation.navigate('EditProduct', { product: item })
           }>
           <View style={styles.iconContainer}>
             <MaterialIcons name="shopping-bag" size={ICON_SIZE} color={ICON_COLOR} />
