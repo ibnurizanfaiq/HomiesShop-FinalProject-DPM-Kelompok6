@@ -12,7 +12,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { getProduct } from '../components/productEnd';
 
 const ICON_SIZE = 50;
-const ICON_COLOR = '#4CAF50';
+const ICON_COLOR = '#375534';
 
 const ProductScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
@@ -51,9 +51,9 @@ const ProductScreen = ({ navigation }) => {
       <SafeAreaView style={styles.container}>
         <TouchableOpacity
           style={styles.productContainer}
-          onPress={() =>
-            navigation.navigate('EditProduct', { product: item })
-          }>
+          onPress={() => {
+            navigation.navigate('EditProduct', { product: item });
+          }}>
           <View style={styles.iconContainer}>
             <MaterialIcons name="shopping-bag" size={ICON_SIZE} color={ICON_COLOR} />
           </View>
@@ -93,7 +93,7 @@ const ProductScreen = ({ navigation }) => {
         }
       />
       <TouchableOpacity style={styles.addButton} onPress={handleAddProduct}>
-        <Text style={styles.addButtonText}>Tambah Produk</Text>
+        <MaterialIcons name="add" size={30} color="#fff" />
       </TouchableOpacity>
     </SafeAreaView>
   );
@@ -102,16 +102,16 @@ const ProductScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#E3EED4',
   },
   productContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 20,
-    marginHorizontal: 10,
-    backgroundColor: '#fff',
+    marginHorizontal: 20,
+    backgroundColor: '#C4D559',
     padding: 10,
-    borderRadius: 10,
+    borderRadius: 20,
     shadowColor: '#000',
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
@@ -127,29 +127,33 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#000',
   },
   productPrice: {
     fontSize: 16,
-    color: '#4CAF50',
+    color: '#000',
     marginTop: 5,
   },
   productDescription: {
     fontSize: 14,
-    color: '#666',
+    color: '#000',
     marginTop: 5,
   },
   addButton: {
     backgroundColor: '#4CAF50',
-    padding: 15,
-    margin: 10,
-    borderRadius: 5,
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    justifyContent: 'center',
     alignItems: 'center',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
   },
   loaderContainer: {
     flex: 1,
@@ -167,7 +171,7 @@ const styles = StyleSheet.create({
   emptyText: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#999',
+    color: '#375534',
     marginTop: 10,
   },
 });

@@ -73,6 +73,23 @@ export const getSubCategories = async () => {
     }
 };
 
+//getImages Function
+export const getImages = async (idcategory, idsubcategory) => {
+    try {
+        const imageRef = ref(database, `subcategories/${idcategory}/${idsubcategory}`);
+        const snapshot = await get(imageRef);
+
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+
+            return {success: true, data: data.image};
+        } else {
+            return {success: false, message: "Data gambar tidak ditemukan."};
+        }
+    } catch (error) {
+        return {success: false, message: "Terjadi kesalahan saat mengambil data."};
+    }
+}
 
 
 //AddProduct Function
@@ -109,8 +126,6 @@ export const getProduct = async () => {
         Object.keys(data[subCategoryId]).forEach((productId) => {
           const product = data[subCategoryId][productId];
           productList.push({
-            id: productId,
-            subCategoryId,
             ...product,
           });
         });
@@ -136,7 +151,17 @@ export const GetProductById = async (idsubcategory) => {
         const snapshot = await get(productRef);
 
         if (snapshot.exists()) {
-            return {success: true, data: snapshot.val()};
+            const data = snapshot.val();
+            const productList = [];
+
+            Object.keys(data).forEach((productId) => {
+                const product = data[productId];
+                productList.push({
+                    ...product,
+                });
+            });
+
+            return {success: true, data: productList};
         } else {
             return {success: false, message: "Data produk tidak ditemukan."};
         }

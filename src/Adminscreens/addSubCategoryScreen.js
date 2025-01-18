@@ -67,17 +67,21 @@ const AddSubCategoryScreen = ({navigation}) => {
                 <View style={styles.infoCard}>
                     <Text style={styles.infoTitle}>Informasi Sub Kategori</Text>
 
-                    <View style={styles.formGroup}>
-                        <Text style={styles.label}>ID Kategori</Text>
-                        <RNPickerSelect
-                            onValueChange={(value) => setIdcategory(value)}
-                            items={categories.map((category) => ({
-                                label: category.name,
-                                value: category.idcategory,
-                            }))}
-                        />
-                        <TouchableOpacity onPress={handleAddCategory}>
-                            <Text style={{color: "#007BFF", marginTop: 5}}>Tambah Kategori</Text>
+                    <View style={styles.formGroupRow}>
+                        <View style={{flex: 1}}>
+                            <Text style={styles.label}>ID Kategori</Text>
+                            <RNPickerSelect
+                                onValueChange={(value) => setIdcategory(value)}
+                                items={categories.map((category) => ({
+                                    label: category.name,
+                                    value: category.idcategory,
+                                }))}
+                                style={pickerStyles}
+                                placeholder={{ label: "Pilih Category", value: null }}
+                            /> 
+                        </View>
+                        <TouchableOpacity onPress={handleAddCategory} style={styles.addCategoryBtn}>
+                             <Text style={styles.addCategoryBtnText}>+</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -95,12 +99,11 @@ const AddSubCategoryScreen = ({navigation}) => {
                         <Text style={styles.label}>Nama Sub Kategori</Text>
                         <TextInput
                             style={styles.input}
-                            placeholder="Masukkan Nama Sub Kategori"
+                            placeholder="Masukkan Nama SubKategori"
                             value={Name}
                             onChangeText={(value) => setName(value)}
                         />
                     </View>
-
                     <TouchableOpacity style={styles.button} onPress={handleSubCategories}>
                         <Text style={styles.buttonText}>Tambah Sub Kategori</Text>
                     </TouchableOpacity>
@@ -109,18 +112,39 @@ const AddSubCategoryScreen = ({navigation}) => {
         </SafeAreaView>
     );
 };
+const pickerStyles = StyleSheet.create({
+    inputIOS: {
+      width: "100%",
+      height: 50,
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      backgroundColor: "#fff",
+      marginBottom: 20,
+    },
+    inputAndroid: {
+      width: "100%",
+      height: 50,
+      borderWidth: 1,
+      borderColor: "#ccc",
+      borderRadius: 8,
+      paddingHorizontal: 10,
+      backgroundColor: "#fff",
+    },
+  });
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "#E3EED4",
     },
     content: {
         flex: 1,
         padding: 20,
     },
     infoCard: {
-        backgroundColor: "#fff",
+        backgroundColor: "#C4D559",
         padding: 20,
         borderRadius: 10,
     },
@@ -141,16 +165,19 @@ const styles = StyleSheet.create({
         borderColor: "#ddd",
         borderRadius: 5,
         padding: 10,
+        backgroundColor: "#fff",
     },
     button: {
         backgroundColor: "#007BFF",
-        padding: 10,
+        padding: 8,
         borderRadius: 5,
+        height: 43,
         alignItems: "center",
         marginTop: 10,
     },
     buttonText: {
         color: "#fff",
+        fontWeight: "bold",
         fontSize: 16,
     },
     loadingContainer: {
@@ -159,6 +186,26 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
+    addCategoryBtn: {
+        backgroundColor: "#4285F4",
+        width: 50,
+        height: 50,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: 10,
+        marginTop: 25,
+      },
+      addCategoryBtnText: {
+        color: "#FFFFFF",
+        fontSize: 24,
+        fontWeight: "bold",
+      },
+      formGroupRow: {
+        flexDirection: "row",
+        alignItems: "center",
+        marginBottom: 20,
+      },
 });
 
 export default AddSubCategoryScreen;

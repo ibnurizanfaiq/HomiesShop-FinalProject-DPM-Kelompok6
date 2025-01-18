@@ -1,18 +1,21 @@
-import React, { useState, useEffect } from "react";
-import { SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput } from "react-native";
+import React, { useState, useEffect, use } from "react";
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image } from "react-native";
 
-import { GetProductById } from "../components/productEnd"; 
+import { GetProductById, getImages } from "../components/productEnd";
 
 const ProductList = ({ route, navigation }) => {
-    const { subcategoryId } = route.params;
+    const subcategory  = route.params.subCategoryId;
+    const idcategory = route.params.idcategory;
     const [noTujuan, setNoTujuan] = useState("");
     const [products, setProducts] = useState([]);
+    const [images, setImages] = useState([]);
     const [selectedProduct, setSelectedProduct] = useState(null);
 
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                const result = await GetProductById(subcategoryId); 
+                const result = await GetProductById(subcategory);
+                
                 if (result.success) {
                     setProducts(result.data);
                 } else {
@@ -24,14 +27,30 @@ const ProductList = ({ route, navigation }) => {
         };
 
         fetchProducts();
-    }, [subcategoryId]);
+    }, [subcategory]);
+
+    useEffect(() => {
+        const fetchImages = async () => {
+            try {
+                const result = await getImages(idcategory, subcategory);
+                if (result.success) {
+                    setImages(result.data);
+                } else {
+                    console.warn(result?.message || "Invalid response format");
+                }
+            } catch (error) {
+                console.error("Error fetching images:", error);
+            }
+        };
+        fetchImages();
+    }, [idcategory, subcategory]);
+
 
     const handlePay = () => {
         if (!selectedProduct) {
             alert("Pilih produk terlebih dahulu!");
             return;
         }
-
         navigation.navigate("payScreen", { product: selectedProduct, noTujuan });
     };
 
@@ -57,8 +76,15 @@ const ProductList = ({ route, navigation }) => {
                         ]}
                         onPress={() => setSelectedProduct(product)}
                     >
-                        <Text style={styles.productName}>{product.name}</Text>
-                        <Text style={styles.productPrice}>Rp {product.price}</Text>
+                        <Image
+                            source={{ uri: images }}
+                            style={styles.productImage}
+                        />
+                        <View style={styles.productInfo}>
+                            <Text style={styles.productName}>{product.name}</Text>
+                            <Text style={styles.productPrice}>Rp {product.price}</Text>
+                            <Text style={styles.productDescrip}>{product.description}</Text>
+                        </View>
                     </TouchableOpacity>
                 ))}
             </ScrollView>
@@ -66,13 +92,13 @@ const ProductList = ({ route, navigation }) => {
                 <Text style={styles.payButtonText}>Bayar</Text>
             </TouchableOpacity>
         </SafeAreaView>
-    );
+    );    
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f5f5f5",
+        backgroundColor: "#E3EED4",
     },
     header: {
         padding: 10,
@@ -83,12 +109,14 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: "bold",
         marginBottom: 5,
+        marginHorizontal: 20,
     },
     input: {
-        height: 40,
+        height: 43,
         borderWidth: 1,
         borderColor: "#ccc",
-        borderRadius: 5,
+        borderRadius: 20,
+        marginHorizontal: 20,
         paddingHorizontal: 10,
     },
     grid: {
@@ -98,10 +126,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
     },
     productBox: {
-        width: "48%", // 2 kolom
+        flexDirection: "row", 
+        width: "47%",
         backgroundColor: "white",
-        borderRadius: 5,
+        borderRadius: 20,
         padding: 10,
+        marginHorizontal: 5,
         marginBottom: 10,
         alignItems: "center",
         elevation: 3,
@@ -120,18 +150,34 @@ const styles = StyleSheet.create({
         color: "green",
         marginTop: 5,
         textAlign: "center",
+    }, 
+    productDescrip: {
+        fontSize: 14,
+        color: "#000",
+        marginTop: 5,
+        textAlign: "center",
     },
     payButton: {
         backgroundColor: "green",
         padding: 15,
-        borderRadius: 5,
+        borderRadius: 20,
         margin: 10,
+        marginHorizontal: 20,
         alignItems: "center",
     },
     payButtonText: {
         color: "white",
         fontSize: 16,
         fontWeight: "bold",
+    },
+    productImage: {
+        width: 60,
+        height: 60,
+        borderRadius: 5,
+        marginRight: 10, 
+    },
+    productInfo: {
+        flex: 1, 
     },
 });
 

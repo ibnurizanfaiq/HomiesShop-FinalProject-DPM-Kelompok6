@@ -9,7 +9,6 @@ import {
   ActivityIndicator,
   StyleSheet,
   Modal,
-  Button
 } from "react-native";
 import { addProduct, getSubCategories } from "../components/productEnd";
 import RNPickerSelect from "react-native-picker-select";
@@ -115,19 +114,25 @@ const AddProductScreen = ({ navigation }) => {
             />
           </View>
 
-          <View style={styles.formGroup}>
-            <Text style={styles.label}>Kategori</Text>
-            <RNPickerSelect
-              onValueChange={(value) => setIdsubcategory(value)}
-              items={
-                subcategories.length > 0
-                  ? subcategories.map((category) => ({
-                      label: category.name,
-                      value: category.idcategory,
-                    }))
-                  : []}
-            />
-            <Button title="Tambahkan Kategori" onPress={handleAddsub} />
+          <View style={styles.formGroupRow}>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.label}>SubKategori</Text>
+              <RNPickerSelect
+                onValueChange={(value) => setIdsubcategory(value)}
+                items={
+                  subcategories.length > 0
+                    ? subcategories.map((category) => ({
+                        label: category.name,
+                        value: category.idcategory,
+                      }))
+                    : []}
+                style={pickerStyles}
+                placeholder={{ label: "Pilih SubCategory", value: null }}
+              />
+            </View>
+            <TouchableOpacity style={styles.addCategoryBtn} onPress={handleAddsub}>
+              <Text style={styles.addCategoryBtnText}>+</Text>
+            </TouchableOpacity>
           </View>
 
           <View style={styles.formGroup}>
@@ -159,6 +164,29 @@ const AddProductScreen = ({ navigation }) => {
   );
 };
 
+const pickerStyles = StyleSheet.create({
+  inputIOS: {
+    width: "100%",
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 5,
+    backgroundColor: "#fff",
+    marginBottom: 20,
+  },
+  inputAndroid: {
+    width: "100%",
+    height: 50,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 5,
+    backgroundColor: "#fff",
+    marginBottom: 20,
+  },
+});
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -184,9 +212,14 @@ const styles = StyleSheet.create({
   formGroup: {
     marginBottom: 20,
   },
+  formGroupRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 20,
+  },
   label: {
     fontFamily: "Inter",
-    fontWeight: "400",
+    fontWeight: "bold",
     fontSize: 13,
     color: "#000000",
     marginBottom: 8,
@@ -201,18 +234,34 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000000",
   },
+  addCategoryBtn: {
+    backgroundColor: "#4285F4",
+    width: 50,
+    height: 50,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 10,
+    marginTop: 6,
+  },
+  addCategoryBtnText: {
+    color: "#FFFFFF",
+    fontSize: 24,
+    fontWeight: "bold",
+  },
   submitBtn: {
     backgroundColor: "#4285F4",
     borderRadius: 8,
+    height: 43,
     alignItems: "center",
     paddingVertical: 10,
-    marginTop: 10,
+    marginTop: 1,
   },
   submitBtnText: {
     color: "#FFFFFF",
     fontFamily: "Inter",
-    fontWeight: "700",
-    fontSize: 12,
+    fontWeight: "bold",
+    fontSize: 16,
   },
   loadingContainer: {
     flex: 1,

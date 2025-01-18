@@ -70,14 +70,14 @@ const AddCategoryScreen = ({navigation}) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#f0f0f0",
+        backgroundColor: "#E3EED4",
     },
     content: {
         flex: 1,
         padding: 20,
     },
     infoCard: {
-        backgroundColor: "#fff",
+        backgroundColor: "#C4D559",
         padding: 20,
         borderRadius: 10,
         elevation: 5,
@@ -92,18 +92,22 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
+        fontWeight: "bold",
         marginBottom: 5,
     },
     input: {
         borderWidth: 1,
+        height: 43,
         borderColor: "#ccc",
+        backgroundColor: "#fff",
         borderRadius: 5,
         padding: 10,
     },
     submitButton: {
         backgroundColor: "#007BFF",
-        padding: 15,
+        padding: 9,
         borderRadius: 5,
+        height: 43,
         alignItems: "center",
     },
     submitText: {

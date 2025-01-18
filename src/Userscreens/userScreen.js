@@ -61,8 +61,8 @@ const HomeScreen = ({onLogout, navigation}) => {
     fetchSubCategories();
   }, []);
 
-  const handleSubCategoryPress = (subCategoryId) => {
-    navigation.navigate("ProductList", { subCategoryId });
+  const handleSubCategoryPress = (idcategory,subCategoryId) => {
+    navigation.navigate("ProductList", { idcategory , subCategoryId });
   };
 
 
@@ -79,7 +79,7 @@ const HomeScreen = ({onLogout, navigation}) => {
                   <TouchableOpacity
                     key={subCategoryId}
                     style={styles.subCategoryContainer}
-                    onPress={() => handleSubCategoryPress(subCategoryId)}
+                    onPress={() => handleSubCategoryPress(categoryId, subCategoryId)}
                   >
                     <Image
                       source={{ uri: subCategoryData.image }}
