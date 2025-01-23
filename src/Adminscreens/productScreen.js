@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  RefreshControl,
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { getProduct } from '../components/productEnd';
@@ -17,30 +18,38 @@ const ICON_COLOR = '#375534';
 const ProductScreen = ({ navigation }) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+
+  const fetchProduct = async () => {
+    try {
+      const result = await getProduct();
+      if (result.success) {
+        const productArray = Object.keys(result.data).map(key => ({
+          idproduct: key,
+          ...result.data[key],
+        }));
+        setProducts(productArray);
+      } else {
+        console.warn(result?.message || 'Invalid response format');
+        Alert.alert('Sepertinya', result?.message || 'Gagal memuat produk.');
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      Alert.alert('Kesalahan', 'Terjadi kesalahan saat mengambil data produk.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProduct = async () => {
-      try {
-        const result = await getProduct();
-        if (result.success) {
-          const productArray = Object.keys(result.data).map(key => ({
-            idproduct: key,
-            ...result.data[key],
-          }));
-          setProducts(productArray);
-        } else {
-          console.warn(result?.message || 'Invalid response format');
-          Alert.alert('Sepertinya', result?.message || 'Gagal memuat produk.');
-        }
-      } catch (error) {
-        console.error('Error fetching products:', error);
-        Alert.alert('Kesalahan', 'Terjadi kesalahan saat mengambil data produk.');
-      } finally {
-        setLoading(false);
-      }
-    };
     fetchProduct();
   }, []);
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchProduct();
+    setIsRefreshing(false);
+  };
 
   const handleAddProduct = useCallback(() => {
     navigation.navigate('AddProductScreen');
@@ -85,6 +94,7 @@ const ProductScreen = ({ navigation }) => {
         data={products}
         keyExtractor={(item) => item.idproduct.toString()}
         renderItem={renderProduct}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
             <MaterialIcons name="info" size={ICON_SIZE} color="#999" />
@@ -140,7 +150,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   addButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: '#375534',
     width: 60,
     height: 60,
     borderRadius: 30,

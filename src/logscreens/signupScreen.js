@@ -103,7 +103,7 @@ const SignupScreen = ({ navigation }) => {
               style={styles.logo}
             />
 
-            <Text style={styles.title}>Daftar</Text>
+            <Text style={styles.title}>Register</Text>
 
             <Text style={styles.label}>Username</Text>
             <TextInput
@@ -185,7 +185,12 @@ const SignupScreen = ({ navigation }) => {
                 <Icon name={showConfirmPassword ? "eye-off" : "eye"} size={24} color="#333" />
               </TouchableOpacity>
             </View>
-
+            <View style={styles.footer}>
+              <Text>Sudah memiliki akun? </Text>
+              <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
+                <Text style={styles.link}>Masuk</Text>
+              </TouchableOpacity>
+            </View>
             <TouchableOpacity
               onPress={handleRegister}
               style={styles.registerButton}
@@ -193,12 +198,7 @@ const SignupScreen = ({ navigation }) => {
               <Text style={styles.registerButtonText}>Daftar</Text>
             </TouchableOpacity>
 
-            <View style={styles.footer}>
-              <Text>Sudah memiliki akun? </Text>
-              <TouchableOpacity onPress={() => navigation.navigate("LoginScreen")}>
-                <Text style={styles.link}>Masuk</Text>
-              </TouchableOpacity>
-            </View>
+            
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
@@ -232,11 +232,11 @@ const pickerStyles = StyleSheet.create({
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: "#E6F5D0",
+    backgroundColor: "#F5F5F5",
   },
   container: {
     flex: 1,
-    backgroundColor: "#E6F5D0",
+    backgroundColor: "#F5F5F5",
   },
   scrollContainer: {
     flexGrow: 1,
@@ -261,8 +261,8 @@ const styles = StyleSheet.create({
     alignSelf: "flex-start",
     marginBottom: 5,
     fontSize: 14,
-    fontWeight: "600",
-    color: "#333",
+    fontWeight: "bold",
+    color: "#666",
     fontFamily: "Poppins-Regular",
   },
   inputContainer: {
@@ -273,8 +273,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 50,
     borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
+    borderColor: "#4CAF50",
+    borderRadius: 12,
     paddingHorizontal: 10,
     backgroundColor: "#fff",
     fontFamily: "Poppins-Regular",
@@ -288,11 +288,12 @@ const styles = StyleSheet.create({
   registerButton: {
     width: "100%",
     height: 50,
-    backgroundColor: "#43B7B2",
+    backgroundColor: "#4CAF50",
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20,
+    marginTop: 10,
+    marginBottom: 20
   },
   registerButtonText: {
     fontSize: 16,
@@ -301,12 +302,12 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-SemiBold",
   },
   footer: {
-    marginTop: 20,
+    marginTop: 5,
     flexDirection: "row",
     justifyContent: "center",
   },
   link: {
-    color: "#43B7B2",
+    color: "#4CAF50",
     fontWeight: "600",
   },
   loadingContainer: {

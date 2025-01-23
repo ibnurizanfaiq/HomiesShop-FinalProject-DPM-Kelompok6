@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, View, Text, Image, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { SafeAreaView, View, Text, Image, StyleSheet, TouchableOpacity, Alert, ScrollView } from "react-native";
 import { logoutUser } from "../components/backEnd";
 import { FontAwesome5, MaterialIcons, Entypo, Feather } from "@expo/vector-icons";
 
@@ -23,7 +23,7 @@ const AdminScreen = ({ onLogout, navigation }) => {
   };
 
   const handleTransaction = () => {
-    navigation.navigate("TransactionScreen");
+    navigation.navigate("AdminTransaction");
   };
 
   const handleMember = () => {
@@ -31,55 +31,65 @@ const AdminScreen = ({ onLogout, navigation }) => {
   };
 
   const handleProfile = () => {
-    navigation.navigate("ProfileScreen");
+    navigation.navigate("ProfileAdmin");
+  };
+
+  const handleverif = () => {
+    navigation.navigate("Adminverif");
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.container}>
-        <Image
-          source={{ uri: "https://dashboard.codeparrot.ai/api/assets/Z3yn7kjX1HzWCCoB" }}
-          style={styles.headerBg}
-        />
-        <Image
-          source={{ uri: "https://dashboard.codeparrot.ai/api/assets/Z3yn7kjX1HzWCCoC" }}
-          style={styles.logoLeft}
-        />
-        <Text style={styles.adminTitle}>AdminHome</Text>
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <View style={styles.container}>
+          <Image
+            source={{ uri: "https://dashboard.codeparrot.ai/api/assets/Z3yn7kjX1HzWCCoB" }}
+            style={styles.headerBg}
+          />
+          <Image
+            source={{ uri: "https://dashboard.codeparrot.ai/api/assets/Z3yn7kjX1HzWCCoC" }}
+            style={styles.logoLeft}
+          />
+          <Text style={styles.adminTitle}>AdminHome</Text>
 
-        <View style={styles.mainContent}>
-          <View style={styles.gridContainer}>
-            <TouchableOpacity style={styles.gridItem} onPress={handleProduct}>
-              <FontAwesome5 name="box" size={48} color="white" />
-              <Text style={styles.gridText}>Produk</Text>
-            </TouchableOpacity>
+          <View style={styles.mainContent}>
+            <View style={styles.gridContainer}>
+              <TouchableOpacity style={styles.gridItem} onPress={handleProduct}>
+                <FontAwesome5 name="box" size={48} color="white" />
+                <Text style={styles.gridText}>Produk</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.gridItem} onPress={handleTransaction}>
-              <MaterialIcons name="receipt" size={48} color="white" />
-              <Text style={styles.gridText}>Transaksi</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.gridItem} onPress={handleTransaction}>
+                <MaterialIcons name="receipt" size={48} color="white" />
+                <Text style={styles.gridText}>Transaksi</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.gridItem} onPress={handleMember}>
-              <Entypo name="users" size={48} color="white" />
-              <Text style={styles.gridText}>Member</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.gridItem} onPress={handleMember}>
+                <Entypo name="users" size={48} color="white" />
+                <Text style={styles.gridText}>Member</Text>
+              </TouchableOpacity>
 
-            <TouchableOpacity style={styles.gridItem} onPress={handleProfile}>
-              <Feather name="user" size={48} color="white" />
-              <Text style={styles.gridText}>Profile</Text>
-            </TouchableOpacity>
+              <TouchableOpacity style={styles.gridItem} onPress={handleProfile}>
+                <Feather name="user" size={48} color="white" />
+                <Text style={styles.gridText}>Profile</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.gridItem} onPress={handleverif}>
+                <MaterialIcons name="verified-user" size={48} color="white" />
+                <Text style={styles.gridText}>Verifikai Topup</Text>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
 
-        <TouchableOpacity
-          style={styles.logoutButton}
-          onPress={handleLogout}
-          activeOpacity={0.7}
-          accessibilityLabel="Log out of your account"
-        >
-          <Text style={styles.logoutText}>Log Out</Text>
-        </TouchableOpacity>
-      </View>
+          <TouchableOpacity
+            style={styles.logoutButton}
+            onPress={handleLogout}
+            activeOpacity={0.7}
+            accessibilityLabel="Log out of your account"
+          >
+            <Text style={styles.logoutText}>Log Out</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -90,14 +100,19 @@ const styles = StyleSheet.create({
     backgroundColor: "#E3EED4",
     alignItems: "center",
   },
+  scrollContent: {
+    flexGrow: 1,
+    alignItems: "center",
+    paddingBottom: 20,
+  },
   headerBg: {
     width: "100%",
-    height: 350,
+    height: 300,
     position: 'absolute',
     top: 0,
     backgroundColor: '#93c47d',
-    borderBottomLeftRadius: 200, 
-    borderBottomRightRadius: 200, 
+    borderBottomLeftRadius: 100, 
+    borderBottomRightRadius: 100, 
     overflow: 'hidden',
   },
   logoLeft: {

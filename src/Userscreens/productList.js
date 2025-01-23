@@ -1,10 +1,11 @@
-import React, { useState, useEffect, use } from "react";
-import { SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image } from "react-native";
-
-import { GetProductById, getImages } from "../components/productEnd";
+import React, { useState, useEffect} from "react";
+import { SafeAreaView, View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image, Alert } from "react-native";
+import { MaterialIcons } from '@expo/vector-icons';
+import { getImages } from "../components/productEnd";
+import { GetProductById } from "../components/productEnd";
 
 const ProductList = ({ route, navigation }) => {
-    const subcategory  = route.params.subCategoryId;
+    const subcategory = route.params.subCategoryId;
     const idcategory = route.params.idcategory;
     const [noTujuan, setNoTujuan] = useState("");
     const [products, setProducts] = useState([]);
@@ -45,26 +46,31 @@ const ProductList = ({ route, navigation }) => {
         fetchImages();
     }, [idcategory, subcategory]);
 
-
     const handlePay = () => {
-        if (!selectedProduct) {
-            alert("Pilih produk terlebih dahulu!");
+        if (!selectedProduct || !noTujuan) {
+            Alert.alert("Warning","Pilih produk dan no tujuan terlebih dahulu!");
             return;
         }
-        navigation.navigate("payScreen", { product: selectedProduct, noTujuan });
+        navigation.navigate("PayScreen", { product: selectedProduct, noTujuan, images });
     };
 
     return (
         <SafeAreaView style={styles.container}>
+            <View style={styles.head}>
+            </View>
             <View style={styles.header}>
-                <Text style={styles.title}>Masukan Nomor Tujuan</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Masukan Nomor Tujuan"
-                    value={noTujuan}
-                    onChangeText={setNoTujuan}
-                    keyboardType="number-pad"
-                />
+                <Text style={styles.title}>Nomor HP</Text>
+                <View style={styles.inputContainer}>
+                    <MaterialIcons name="phone" size={24} color="#666" style={styles.phoneIcon} />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Destination Number"
+                        value={noTujuan}
+                        onChangeText={setNoTujuan}
+                        keyboardType="number-pad"
+                    />
+                </View>
+                <Text style={styles.subtitle}>Silahkan Pilih Product</Text>
             </View>
             <ScrollView contentContainerStyle={styles.grid}>
                 {products.map((product) => (
@@ -98,63 +104,102 @@ const ProductList = ({ route, navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#E3EED4",
+        backgroundColor: "#E3EED4", 
+    },
+    head: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        height: 150, 
+        backgroundColor: "#B3151C",
+        borderBottomLeftRadius: 40,
+        borderBottomRightRadius: 40,
+        overflow: 'hidden',
     },
     header: {
-        padding: 10,
+        marginTop: 65,
+        padding: 15,
         backgroundColor: "white",
-        marginBottom: 10,
+        marginHorizontal: 15,
+        borderRadius: 12,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+        zIndex: 2,
     },
     title: {
-        fontSize: 18,
-        fontWeight: "bold",
-        marginBottom: 5,
-        marginHorizontal: 20,
+        fontSize: 16,
+        color: "#666",
+        marginBottom: 10,
+        marginLeft: 5,
+    },
+    subtitle: {
+        fontSize: 16,
+        fontWeight: "500",
+        marginTop: 15,
+        marginLeft: 5,
+        color: "#333",
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#ddd',
+        borderRadius: 8,
+        backgroundColor: '#fff',
+        paddingHorizontal: 10,
+        height: 45,
+    },
+    phoneIcon: {
+        marginRight: 10,
     },
     input: {
-        height: 43,
-        borderWidth: 1,
-        borderColor: "#ccc",
-        borderRadius: 20,
-        marginHorizontal: 20,
-        paddingHorizontal: 10,
+        flex: 1,
+        height: '100%',
+        fontSize: 16,
+        color: '#000',
+        padding: 0,
     },
     grid: {
         flexDirection: "row",
         flexWrap: "wrap",
         justifyContent: "space-between",
-        paddingHorizontal: 10,
+        paddingHorizontal: 15,
+        marginTop: 20, 
     },
     productBox: {
-        flexDirection: "row", 
-        width: "47%",
+        flexDirection: "column",
+        width: "48%",
         backgroundColor: "white",
-        borderRadius: 20,
-        padding: 10,
-        marginHorizontal: 5,
-        marginBottom: 10,
+        borderRadius: 12,
+        padding: 15,
+        marginBottom: 15,
         alignItems: "center",
-        elevation: 3,
+        elevation: 2,
     },
     selectedProduct: {
         borderWidth: 2,
         borderColor: "green",
     },
     productName: {
-        fontSize: 16,
+        fontSize: 14,
         fontWeight: "bold",
         textAlign: "center",
     },
     productPrice: {
-        fontSize: 14,
+        fontSize: 13,
         color: "green",
-        marginTop: 5,
         textAlign: "center",
     }, 
     productDescrip: {
-        fontSize: 14,
+        fontSize: 12,
         color: "#000",
-        marginTop: 5,
         textAlign: "center",
     },
     payButton: {
@@ -171,9 +216,9 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     productImage: {
-        width: 60,
-        height: 60,
-        borderRadius: 5,
+        width: 50,
+        height: 50,
+        borderRadius: 10,
         marginRight: 10, 
     },
     productInfo: {

@@ -9,6 +9,8 @@ import {
   ActivityIndicator,
   StyleSheet,
   Modal,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
 import { addProduct, getSubCategories } from "../components/productEnd";
 import RNPickerSelect from "react-native-picker-select";
@@ -21,6 +23,7 @@ const AddProductScreen = ({ navigation }) => {
   const [Description, setDescription] = useState("");
   const [subcategories, setSubcategories] = useState([]);
   const [Loading, setLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const handleAddProduct = async () => {
     if (
@@ -52,33 +55,40 @@ const AddProductScreen = ({ navigation }) => {
     navigation.navigate("AddSubCategoryScreen");
   };
 
-  useEffect(() => {
-    const fetchSubCategories = async () => {
-      try {
-        const result = await getSubCategories();
-        if (result.success) {
-          const data = [];
-          Object.keys(result.data).forEach((key) => {
-            const subcategoryObj = result.data[key];
-            Object.keys(subcategoryObj).forEach((subKey) => {
-              if (subKey !== "name") { 
-                data.push({
-                  idcategory: subKey,
-                  name: subcategoryObj[subKey].name,
-                });
-              }
-            });
+  const fetchSubCategories = async () => {
+    try {
+      const result = await getSubCategories();
+      if (result.success) {
+        const data = [];
+        Object.keys(result.data).forEach((key) => {
+          const subcategoryObj = result.data[key];
+          Object.keys(subcategoryObj).forEach((subKey) => {
+            if (subKey !== "name") { 
+              data.push({
+                idcategory: subKey,
+                name: subcategoryObj[subKey].name,
+              });
+            }
           });
-          setSubcategories(data);
-        } else {
-          Alert.alert("Error", result.message);
-        }
-      } catch (error) {
-        Alert.alert("Error", "Terjadi kesalahan saat mengambil data.");
+        });
+        setSubcategories(data);
+      } else {
+        Alert.alert("Error", result.message);
       }
-    };
+    } catch (error) {
+      Alert.alert("Error", "Terjadi kesalahan saat mengambil data.");
+    }
+  };
+
+  useEffect(() => {
     fetchSubCategories();
   }, []);
+
+  const onRefresh = async () => {
+    setIsRefreshing(true);
+    await fetchSubCategories();
+    setIsRefreshing(false);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -89,7 +99,10 @@ const AddProductScreen = ({ navigation }) => {
           </View>
         </Modal>
       )}
-      <View style={styles.content}>
+      <ScrollView
+        contentContainerStyle={styles.content}
+        refreshControl={<RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />}
+      >
         <View style={styles.infoCard}>
           <Text style={styles.infoTitle}>Informasi Produk</Text>
 
@@ -159,7 +172,7 @@ const AddProductScreen = ({ navigation }) => {
             <Text style={styles.submitBtnText}>Tambahkan</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -228,17 +241,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 43,
     backgroundColor: "#FFFFFF",
-    borderRadius: 8,
+    borderRadius: 10,
     paddingHorizontal: 15,
     fontFamily: "Inter",
     fontSize: 16,
     color: "#000000",
   },
   addCategoryBtn: {
-    backgroundColor: "#4285F4",
+    backgroundColor: "#375534",
     width: 50,
     height: 50,
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: "center",
     marginLeft: 10,
@@ -250,8 +263,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   submitBtn: {
-    backgroundColor: "#4285F4",
-    borderRadius: 8,
+    backgroundColor: "#375534",
+    borderRadius: 10,
     height: 43,
     alignItems: "center",
     paddingVertical: 10,
